@@ -6,15 +6,26 @@
 //  Copyright (c) 2013 Facebook. All rights reserved.
 //
 
+#import <FacebookSDK/FacebookSDK.h>
 #import "AppDelegate.h"
+#import "BumpViewController.h"
 
 @implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    self.window.rootViewController = [[BumpViewController alloc] init];
     [self.window makeKeyAndVisible];
     return YES;
 }

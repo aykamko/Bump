@@ -19,6 +19,16 @@
 		7C7019E317A89CE100596218 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7019CB17A89CE100596218 /* UIKit.framework */; };
 		7C7019EB17A89CE100596218 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C7019E917A89CE100596218 /* InfoPlist.strings */; };
 		7C7019ED17A89CE100596218 /* BumpTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C7019EC17A89CE100596218 /* BumpTests.m */; };
+		7C7019F817A89CFC00596218 /* BumpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C7019F717A89CFC00596218 /* BumpViewController.m */; };
+		7C7019FA17A89EB600596218 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7019F917A89EB600596218 /* CoreMotion.framework */; };
+		7C7019FC17A89EBA00596218 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7019FB17A89EBA00596218 /* CoreLocation.framework */; };
+		7C7019FF17A8BE9A00596218 /* HerokuDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C7019FE17A8BE9A00596218 /* HerokuDataStore.m */; };
+		7C701A0117A8C0CA00596218 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0017A8C0CA00596218 /* FacebookSDK.framework */; };
+		7C701A0317A8C0F400596218 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0217A8C0F400596218 /* Security.framework */; };
+		7C701A0517A8C0F800596218 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0417A8C0F800596218 /* Social.framework */; };
+		7C701A0717A8C0FC00596218 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0617A8C0FC00596218 /* AdSupport.framework */; };
+		7C701A0917A8C10000596218 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0817A8C10000596218 /* Accounts.framework */; };
+		7C701A0B17A8C10700596218 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C701A0A17A8C10600596218 /* libsqlite3.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +58,18 @@
 		7C7019E817A89CE100596218 /* BumpTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BumpTests-Info.plist"; sourceTree = "<group>"; };
 		7C7019EA17A89CE100596218 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7C7019EC17A89CE100596218 /* BumpTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BumpTests.m; sourceTree = "<group>"; };
+		7C7019F617A89CFC00596218 /* BumpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BumpViewController.h; sourceTree = "<group>"; };
+		7C7019F717A89CFC00596218 /* BumpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BumpViewController.m; sourceTree = "<group>"; };
+		7C7019F917A89EB600596218 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		7C7019FB17A89EBA00596218 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7C7019FD17A8BE9A00596218 /* HerokuDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HerokuDataStore.h; sourceTree = "<group>"; };
+		7C7019FE17A8BE9A00596218 /* HerokuDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HerokuDataStore.m; sourceTree = "<group>"; };
+		7C701A0017A8C0CA00596218 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		7C701A0217A8C0F400596218 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		7C701A0417A8C0F800596218 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		7C701A0617A8C0FC00596218 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		7C701A0817A8C10000596218 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		7C701A0A17A8C10600596218 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +77,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C701A0B17A8C10700596218 /* libsqlite3.0.dylib in Frameworks */,
+				7C701A0917A8C10000596218 /* Accounts.framework in Frameworks */,
+				7C701A0717A8C0FC00596218 /* AdSupport.framework in Frameworks */,
+				7C701A0517A8C0F800596218 /* Social.framework in Frameworks */,
+				7C701A0317A8C0F400596218 /* Security.framework in Frameworks */,
+				7C701A0117A8C0CA00596218 /* FacebookSDK.framework in Frameworks */,
+				7C7019FC17A89EBA00596218 /* CoreLocation.framework in Frameworks */,
+				7C7019FA17A89EB600596218 /* CoreMotion.framework in Frameworks */,
 				7C7019CA17A89CE100596218 /* CoreGraphics.framework in Frameworks */,
 				7C7019CC17A89CE100596218 /* UIKit.framework in Frameworks */,
 				7C7019C817A89CE100596218 /* Foundation.framework in Frameworks */,
@@ -96,6 +126,14 @@
 		7C7019C617A89CE100596218 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C701A0A17A8C10600596218 /* libsqlite3.0.dylib */,
+				7C701A0817A8C10000596218 /* Accounts.framework */,
+				7C701A0617A8C0FC00596218 /* AdSupport.framework */,
+				7C701A0417A8C0F800596218 /* Social.framework */,
+				7C701A0217A8C0F400596218 /* Security.framework */,
+				7C701A0017A8C0CA00596218 /* FacebookSDK.framework */,
+				7C7019FB17A89EBA00596218 /* CoreLocation.framework */,
+				7C7019F917A89EB600596218 /* CoreMotion.framework */,
 				7C7019C717A89CE100596218 /* Foundation.framework */,
 				7C7019C917A89CE100596218 /* CoreGraphics.framework */,
 				7C7019CB17A89CE100596218 /* UIKit.framework */,
@@ -109,6 +147,10 @@
 			children = (
 				7C7019D617A89CE100596218 /* AppDelegate.h */,
 				7C7019D717A89CE100596218 /* AppDelegate.m */,
+				7C7019F617A89CFC00596218 /* BumpViewController.h */,
+				7C7019F717A89CFC00596218 /* BumpViewController.m */,
+				7C7019FD17A8BE9A00596218 /* HerokuDataStore.h */,
+				7C7019FE17A8BE9A00596218 /* HerokuDataStore.m */,
 				7C7019D917A89CE100596218 /* Images.xcassets */,
 				7C7019CE17A89CE100596218 /* Supporting Files */,
 			);
@@ -240,7 +282,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C7019D817A89CE100596218 /* AppDelegate.m in Sources */,
+				7C7019FF17A8BE9A00596218 /* HerokuDataStore.m in Sources */,
 				7C7019D417A89CE100596218 /* main.m in Sources */,
+				7C7019F817A89CFC00596218 /* BumpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,9 +399,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Bump/Bump-Prefix.pch";
 				INFOPLIST_FILE = "Bump/Bump-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -368,9 +417,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Bump/Bump-Prefix.pch";
 				INFOPLIST_FILE = "Bump/Bump-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

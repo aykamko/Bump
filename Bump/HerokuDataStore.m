@@ -17,13 +17,13 @@
 
 @property (nonatomic) double bumpTime;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, copy) void (^completionHandler)(NSDictionary *closeUsers, NSError *error);
+@property (nonatomic, copy) void (^completionHandler)(NSArray *closeUsers, NSError *error);
 
 @end
 
 @implementation HerokuDataStore
 
-- (void)registerBumpAtTime:(time_t)bumpTime andGetCloseUsers:(void (^)(NSDictionary *closeUsers, NSError *error))completionHandler
+- (void)registerBumpAtTime:(time_t)bumpTime andGetCloseUsers:(void (^)(NSArray *closeUsers, NSError *error))completionHandler
 {
     _bumpTime = bumpTime;
     _completionHandler = completionHandler;
@@ -74,13 +74,13 @@
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                if (connectionError) {
-                                   NSLog(@"error: %@", connectionError.localizedDescription);
+                                   [self completionHandler](nil, connectionError);
                                } else {
                                    NSError *jsonError;
-                                   NSDictionary *resultDict = [NSJSONSerialization JSONObjectWithData:data
-                                                                                              options:NSJSONReadingMutableContainers
-                                                                                                error:&jsonError];
-                                   NSLog(@"%@", resultDict);
+                                   NSArray *resultArray = [NSJSONSerialization JSONObjectWithData:data
+                                                                                          options:NSJSONReadingMutableContainers
+                                                                                            error:&jsonError];
+                                   [self completionHandler](resultArray, nil);
                                }
                            }];
 }

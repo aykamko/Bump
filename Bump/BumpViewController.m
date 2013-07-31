@@ -38,7 +38,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _bumpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [_bumpButton setFrame:CGRectMake(0, 0, 260, 50)];
+        [_bumpButton setFrame:CGRectMake(0, 0, 260, 260)];
         [_bumpButton setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:0.1]];
         [_bumpButton setCenter:self.view.center];
         [_bumpButton setTitle:@"Bump!" forState:UIControlStateNormal];
@@ -50,7 +50,7 @@
         _facebookButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [_facebookButton setFrame:CGRectMake(0, 0, 260, 50)];
         [_facebookButton setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:0.1]];
-        [_facebookButton setCenter:CGPointMake(self.view.center.x, self.view.center.y - 60)];
+        [_facebookButton setCenter:CGPointMake(self.view.center.x, self.view.center.y)];
         
         if ([[FBSession activeSession] isOpen]) {
             [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
@@ -71,13 +71,23 @@
     if ([[FBSession activeSession] isOpen]) {
         [[FBSession activeSession] closeAndClearTokenInformation];
         [_bumpButton removeFromSuperview];
-        [_facebookButton setTitle:@"Log In" forState:UIControlStateNormal];
+        [UIView animateWithDuration:0.6
+                         animations:^{
+                             [_facebookButton setTitle:@"Log In" forState:UIControlStateNormal];
+                             [_facebookButton setCenter:self.view.center];
+                         }];
     } else {
         [FBSession openActiveSessionWithReadPermissions:nil
                                            allowLoginUI:YES
                                       completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-                                              [self.view addSubview:_bumpButton];
-                                          [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
+          [UIView animateWithDuration:0.6
+                           animations:^{
+                               CGPoint newCenter = CGPointMake(self.view.center.x, self.view.center.y - 160);
+                               [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
+                               [_facebookButton setCenter:newCenter];
+                           } completion:^(BOOL finished) {
+                               [self.view addSubview:_bumpButton];
+                           }];
                                       }];
     }
 }
@@ -124,9 +134,8 @@
         }];
     } else {
         [_motionManager stopAccelerometerUpdates];
-        _accelerometerQueue = nil;
-        _motionManager = nil;
         [_bumpButton setTitle:@"Bump!" forState:UIControlStateNormal];
+        [self setIsBumping:NO];
     }
 }
 
@@ -144,9 +153,36 @@
     double difference = maxDouble - minDouble;
     if (difference < 2.4f) {
         NSLog(@"bumped at time: %f", CFAbsoluteTimeGetCurrent());
-        _heroku = [[HerokuDataStore alloc] init];
+        
         [_motionManager stopAccelerometerUpdates];
-        [_heroku registerBumpAtTime:[[NSDate date] timeIntervalSince1970] andGetCloseUsers:nil];
+        
+        [_bumpButton setTitle:nil forState:UIControlStateNormal];
+        __block UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        
+        spinner.center = _bumpButton.center;
+        [self.view addSubview:spinner];
+        [spinner startAnimating];
+        
+        _heroku = [[HerokuDataStore alloc] init];
+        [_heroku registerBumpAtTime:[[NSDate date] timeIntervalSince1970] andGetCloseUsers:^(NSArray *closeUsers, NSError *error) {
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
+            [_bumpButton setTitle:@"Bump!" forState:UIControlStateNormal];
+            if (error) {
+                NSLog(@"Error: %@", error.localizedDescription);
+            } else {
+                NSString *bumpedID = closeUsers[1][@"fbid"];
+                
+                NSString *facebookPageURL = [NSString stringWithFormat:@"fb://profile/%@",
+                                             bumpedID];
+                NSURL *url = [NSURL URLWithString:facebookPageURL];
+                
+                if (![[UIApplication sharedApplication] openURL:url])
+                    NSLog(@"%@%@",@"Failed to open url:",[url description]);
+                
+            }
+        }];
     }
     
 }

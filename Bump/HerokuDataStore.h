@@ -10,6 +10,6 @@
 
 @interface HerokuDataStore : UIViewController
 
-- (void)registerBumpAtTime:(time_t)time andGetCloseUsers:(void (^)(NSDictionary *closeUsers, NSError *error))completionHandler;
+- (void)registerBumpAtTime:(time_t)bumpTime andGetCloseUsers:(void (^)(NSArray *closeUsers, NSError *error))completionHandler;
 
 @end

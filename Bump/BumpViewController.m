@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 Facebook. All rights reserved.
 //
 
+#define kUpdateFrequency         100.0
+#define kAccelerationThreshold   1.4
+#define kDifferenceThreshold     3.0
+
 #import "BumpViewController.h"
 #import <CoreMotion/CoreMotion.h>
 #import <FacebookSDK/FacebookSDK.h>
@@ -38,9 +42,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _bumpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [_bumpButton setFrame:CGRectMake(0, 0, 260, 260)];
+        [_bumpButton setFrame:CGRectMake(0, 0, 280, 350)];
         [_bumpButton setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:0.1]];
-        [_bumpButton setCenter:self.view.center];
         [_bumpButton setTitle:@"Bump!" forState:UIControlStateNormal];
         [_bumpButton addTarget:self
                         action:@selector(startAccelerometer:)
@@ -48,7 +51,7 @@
         _accelData = [[NSMutableArray alloc] init];
         
         _facebookButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [_facebookButton setFrame:CGRectMake(0, 0, 260, 50)];
+        [_facebookButton setFrame:CGRectMake(0, 0, 280, 60)];
         [_facebookButton setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:0.1]];
         [_facebookButton setCenter:CGPointMake(self.view.center.x, self.view.center.y)];
         
@@ -66,27 +69,50 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    if ([[FBSession activeSession] isOpen]) {
+        CGPoint newCenter = CGPointMake(self.view.center.x, self.view.center.y - 215);
+        [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
+        [_facebookButton setCenter:newCenter];
+        [self.view addSubview:_bumpButton];
+    }
+}
+
 - (void)facebookButtonPressed:(id)sender
 {
     if ([[FBSession activeSession] isOpen]) {
         [[FBSession activeSession] closeAndClearTokenInformation];
-        [_bumpButton removeFromSuperview];
-        [UIView animateWithDuration:0.6
+        [UIView animateWithDuration:0.4
                          animations:^{
+                             CGFloat xPos = (self.view.bounds.size.width - _bumpButton.bounds.size.width) / 2.0;
+                             CGPoint newOrigin = CGPointMake(xPos, UIScreen.mainScreen.bounds.size.height);
+                             CGRect newFrame = CGRectMake(newOrigin.x, newOrigin.y, _bumpButton.frame.size.width, _bumpButton.frame.size.height);
+                             
                              [_facebookButton setTitle:@"Log In" forState:UIControlStateNormal];
                              [_facebookButton setCenter:self.view.center];
+                             [_bumpButton setFrame:newFrame];
+                         } completion:^(BOOL finished) {
+                             [_bumpButton removeFromSuperview];
                          }];
     } else {
         [FBSession openActiveSessionWithReadPermissions:nil
                                            allowLoginUI:YES
                                       completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-          [UIView animateWithDuration:0.6
+          [UIView animateWithDuration:0.4
                            animations:^{
-                               CGPoint newCenter = CGPointMake(self.view.center.x, self.view.center.y - 160);
-                               [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
-                               [_facebookButton setCenter:newCenter];
-                           } completion:^(BOOL finished) {
+                               
+                               CGFloat xPos = (self.view.bounds.size.width - _bumpButton.bounds.size.width) / 2.0;
+                               CGPoint newOrigin = CGPointMake(xPos, UIScreen.mainScreen.bounds.size.height);
+                               CGRect newFrame = CGRectMake(newOrigin.x, newOrigin.y, _bumpButton.frame.size.width, _bumpButton.frame.size.height);
+                               [_bumpButton setFrame:newFrame];
                                [self.view addSubview:_bumpButton];
+                               
+                               CGPoint fbButtonCenter = CGPointMake(self.view.center.x, self.view.center.y - 215);
+                               CGPoint bumpButtonCenter = self.view.center;
+                               [_facebookButton setTitle:@"Log Out" forState:UIControlStateNormal];
+                               [_facebookButton setCenter:fbButtonCenter];
+                               [_bumpButton setCenter:bumpButtonCenter];
                            }];
                                       }];
     }
@@ -98,7 +124,7 @@
     if ([self isBumping] == NO) {
         [_bumpButton setTitle:@"Stop Bump" forState:UIControlStateNormal];
         _motionManager = [[CMMotionManager alloc] init];
-        _motionManager.accelerometerUpdateInterval = 0.01f;
+        _motionManager.accelerometerUpdateInterval = 1.0 / kUpdateFrequency;
         
         _accelerometerQueue = [[NSOperationQueue alloc] init];
         
@@ -113,7 +139,7 @@
                     double yAccel = accelerometerData.acceleration.y;
                     double zAccel = accelerometerData.acceleration.z;
                     double vectorMagnitude = sqrt((xAccel * xAccel) + (yAccel * yAccel) + (zAccel * zAccel));
-                    if (vectorMagnitude > 1.4) {
+                    if (vectorMagnitude > kAccelerationThreshold) {
                         if (_thresholdReached == NO)
                             _thresholdReached = YES;
                             [_accelData addObject:@(vectorMagnitude)];
@@ -151,7 +177,7 @@
     double maxDouble = [max doubleValue];
     
     double difference = maxDouble - minDouble;
-    if (difference < 2.4f) {
+    if (difference < kDifferenceThreshold) {
         NSLog(@"bumped at time: %f", CFAbsoluteTimeGetCurrent());
         
         [_motionManager stopAccelerometerUpdates];
@@ -169,11 +195,23 @@
             [spinner stopAnimating];
             [spinner removeFromSuperview];
             [_bumpButton setTitle:@"Bump!" forState:UIControlStateNormal];
+            [self setIsBumping:NO];
             if (error) {
                 NSLog(@"Error: %@", error.localizedDescription);
             } else {
-                NSString *bumpedID = closeUsers[1][@"fbid"];
+                if ([closeUsers count] == 0) {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Sorry!"
+                                                                        message:@"We couldn't find any Facebook users that matched your bump."
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"Bump again!"
+                                                              otherButtonTitles:nil];
+                    [alertView show];
+                    return;
+                }
                 
+                NSDictionary *closestUser = [closeUsers firstObject];
+                
+                NSString *bumpedID = closestUser[@"fbid"];
                 NSString *facebookPageURL = [NSString stringWithFormat:@"fb://profile/%@",
                                              bumpedID];
                 NSURL *url = [NSURL URLWithString:facebookPageURL];

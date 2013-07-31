@@ -73,16 +73,28 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               if (connectionError) {
-                                   [self completionHandler](nil, connectionError);
-                               } else {
-                                   NSError *jsonError;
-                                   NSArray *resultArray = [NSJSONSerialization JSONObjectWithData:data
-                                                                                          options:NSJSONReadingMutableContainers
-                                                                                            error:&jsonError];
-                                   [self completionHandler](resultArray, nil);
-                               }
+                               
+                               double delayInSeconds = 0.8;
+                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                    [NSURLConnection sendAsynchronousRequest:request
+                                                                       queue:[NSOperationQueue mainQueue]
+                                                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                                                               if (connectionError) {
+                                                                   [self completionHandler](nil, connectionError);
+                                                               } else {
+                                                                   NSError *jsonError;
+                                                                   NSArray *resultArray = [NSJSONSerialization JSONObjectWithData:data
+                                                                                                                          options:NSJSONReadingMutableContainers
+                                                                                                                            error:&jsonError];
+                                                                   [self completionHandler](resultArray, nil);
+                                                               }
+                                                           }];
+                                   
+                               });
+                               
                            }];
+    
 }
 
 @end
